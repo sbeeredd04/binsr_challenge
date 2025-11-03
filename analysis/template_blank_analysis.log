@@ -1,2 +1,178 @@
 2025-11-03 14:29:42,045 - ERROR - Missing required library: No module named 'pikepdf'
 2025-11-03 14:29:42,045 - INFO - Install with: pip install pypdf pikepdf
+2025-11-03 14:47:31,028 - ERROR - Missing required library: No module named 'pypdf'
+2025-11-03 14:47:31,029 - INFO - Install with: pip install pypdf pikepdf
+2025-11-03 14:47:40,273 - ERROR - Missing required library: No module named 'pypdf'
+2025-11-03 14:47:40,273 - INFO - Install with: pip install pypdf pikepdf
+2025-11-03 14:48:22,305 - INFO - pikepdf C++ to Python logger bridge initialized
+2025-11-03 14:48:23,268 - INFO - ================================================================================
+2025-11-03 14:48:23,269 - INFO - ANALYZING: assets/TREC_Template_Blank.pdf
+2025-11-03 14:48:23,269 - INFO - ================================================================================
+2025-11-03 14:48:23,269 - INFO - 
+================================================================================
+2025-11-03 14:48:23,269 - INFO - 1. BASIC STRUCTURE ANALYSIS (pypdf)
+2025-11-03 14:48:23,269 - INFO - ================================================================================
+2025-11-03 14:48:23,280 - INFO - Total pages: 6
+2025-11-03 14:48:23,280 - INFO -   Page 1: 612.0 x 792.0 pts (8.50 x 11.00 inches)
+2025-11-03 14:48:23,280 - INFO -   Page 2: 612.0 x 792.0 pts (8.50 x 11.00 inches)
+2025-11-03 14:48:23,280 - INFO -   Page 3: 612.0 x 792.0 pts (8.50 x 11.00 inches)
+2025-11-03 14:48:23,280 - INFO -   Page 4: 612.0 x 792.0 pts (8.50 x 11.00 inches)
+2025-11-03 14:48:23,280 - INFO -   Page 5: 612.0 x 792.0 pts (8.50 x 11.00 inches)
+2025-11-03 14:48:23,280 - INFO -   Page 6: 612.0 x 792.0 pts (8.50 x 11.00 inches)
+2025-11-03 14:48:23,280 - INFO - 
+Metadata:
+2025-11-03 14:48:23,280 - INFO -   /Author: TREC
+2025-11-03 14:48:23,280 - INFO -   /CreationDate: D:20210830114733-05'00'
+2025-11-03 14:48:23,280 - INFO -   /Creator: PScript5.dll Version 5.2.2
+2025-11-03 14:48:23,280 - INFO -   /ModDate: D:20231017095310-05'00'
+2025-11-03 14:48:23,281 - INFO -   /Producer: Acrobat Distiller 17.0 (Windows)
+2025-11-03 14:48:23,281 - INFO -   /Title: REI 7-6 Fillable
+2025-11-03 14:48:23,281 - INFO - 
+Has AcroForm (fillable form): True
+2025-11-03 14:48:23,281 - INFO - 
+================================================================================
+2025-11-03 14:48:23,281 - INFO - 2. FORM FIELD ANALYSIS (pypdf)
+2025-11-03 14:48:23,281 - INFO - ================================================================================
+2025-11-03 14:48:23,344 - INFO - Total fields: 250
+2025-11-03 14:48:23,344 - INFO - 
+Field types:
+2025-11-03 14:48:23,344 - INFO -   /Tx: 81
+2025-11-03 14:48:23,344 - INFO -   Unknown: 5
+2025-11-03 14:48:23,344 - INFO -   /Btn: 164
+2025-11-03 14:48:23,344 - INFO - 
+Sample fields (first 10):
+2025-11-03 14:48:23,344 - INFO -   1. Name of Client
+2025-11-03 14:48:23,344 - INFO -      Type: /Tx, Value: NO_VALUE
+2025-11-03 14:48:23,344 - INFO -   2. Date of Inspection
+2025-11-03 14:48:23,344 - INFO -      Type: /Tx, Value: NO_VALUE
+2025-11-03 14:48:23,344 - INFO -   3. Address of Inspected Property
+2025-11-03 14:48:23,344 - INFO -      Type: /Tx, Value: NO_VALUE
+2025-11-03 14:48:23,344 - INFO -   4. Name of Inspector
+2025-11-03 14:48:23,344 - INFO -      Type: /Tx, Value: NO_VALUE
+2025-11-03 14:48:23,344 - INFO -   5. TREC License
+2025-11-03 14:48:23,344 - INFO -      Type: /Tx, Value: NO_VALUE
+2025-11-03 14:48:23,344 - INFO -   6. Name of Sponsor if applicable
+2025-11-03 14:48:23,344 - INFO -      Type: /Tx, Value: NO_VALUE
+2025-11-03 14:48:23,344 - INFO -   7. TREC License_2
+2025-11-03 14:48:23,344 - INFO -      Type: /Tx, Value: NO_VALUE
+2025-11-03 14:48:23,344 - INFO -   8. Page 2 of
+2025-11-03 14:48:23,344 - INFO -      Type: /Tx, Value: NO_VALUE
+2025-11-03 14:48:23,344 - INFO -   9. Text1
+2025-11-03 14:48:23,344 - INFO -      Type: /Tx, Value: NO_VALUE
+2025-11-03 14:48:23,344 - INFO -   10. topmostSubform[0]
+2025-11-03 14:48:23,344 - INFO -      Type: Unknown, Value: NO_VALUE
+2025-11-03 14:48:23,345 - INFO - 
+Checkbox fields: 144
+2025-11-03 14:48:23,345 - INFO - First 10 checkbox field names:
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].CheckBox1[0]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].CheckBox1[1]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].CheckBox1[2]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].CheckBox1[3]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].CheckBox1[7]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].CheckBox1[6]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].CheckBox1[5]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].CheckBox1[4]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].CheckBox1[11]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].CheckBox1[10]
+2025-11-03 14:48:23,345 - INFO - 
+Text fields: 72
+2025-11-03 14:48:23,345 - INFO - First 10 text field names:
+2025-11-03 14:48:23,345 - INFO -   Text1
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].TextField1[0]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page3[0].TextField2[0]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page4[0].TextField1[0]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page4[0].TextField2[0]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page5[0].TextField1[0]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page5[0].TextField2[0]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page6[0].TextField1[0]
+2025-11-03 14:48:23,345 - INFO -   topmostSubform[0].Page6[0].TextField2[0]
+2025-11-03 14:48:23,345 - INFO -   Text6
+2025-11-03 14:48:23,345 - INFO - 
+================================================================================
+2025-11-03 14:48:23,345 - INFO - 3. FORM FIELD ANALYSIS (pikepdf - detailed)
+2025-11-03 14:48:23,345 - INFO - ================================================================================
+2025-11-03 14:48:23,346 - INFO - Top-level form fields: 94
+2025-11-03 14:48:23,352 - INFO - Total leaf fields: 245
+2025-11-03 14:48:23,352 - INFO - 
+Field naming patterns:
+2025-11-03 14:48:23,352 - INFO -   topmostSubform[0].Page3[0]: 50 fields
+2025-11-03 14:48:23,352 - INFO -   topmostSubform[0].Page5[0]: 46 fields
+2025-11-03 14:48:23,352 - INFO -   topmostSubform[0].Page4[0]: 42 fields
+2025-11-03 14:48:23,352 - INFO -   topmostSubform[0].Page6[0]: 14 fields
+2025-11-03 14:48:23,352 - INFO - 
+Checkbox fields: 144
+2025-11-03 14:48:23,352 - INFO - Sample checkbox names:
+2025-11-03 14:48:23,352 - INFO -   topmostSubform[0].Page3[0].CheckBox1[0]
+2025-11-03 14:48:23,352 - INFO -   topmostSubform[0].Page3[0].CheckBox1[1]
+2025-11-03 14:48:23,352 - INFO -   topmostSubform[0].Page3[0].CheckBox1[2]
+2025-11-03 14:48:23,352 - INFO -   topmostSubform[0].Page3[0].CheckBox1[3]
+2025-11-03 14:48:23,352 - INFO -   topmostSubform[0].Page3[0].CheckBox1[7]
+2025-11-03 14:48:23,353 - INFO - 
+================================================================================
+2025-11-03 14:48:23,353 - INFO - 4. PAGE CONTENT ANALYSIS
+2025-11-03 14:48:23,353 - INFO - ================================================================================
+2025-11-03 14:48:23,358 - INFO - 
+Page 1:
+2025-11-03 14:48:23,376 - INFO -   Text lines: 50
+2025-11-03 14:48:23,376 - INFO -   Text length: 3656 characters
+2025-11-03 14:48:23,376 - INFO -   First 200 characters:
+2025-11-03 14:48:23,376 - INFO -     REI 7-6 (8/9/21) Promulgated by the Texas Real Estate Commission   (512) 936-3000   www.trec.texas.gov        Name of Client Date of Inspection  Address of Inspected Property  Name of Inspector TREC
+2025-11-03 14:48:23,376 - INFO -   Fonts: 8
+2025-11-03 14:48:23,376 - INFO -   XObjects (images, forms): 3
+2025-11-03 14:48:23,376 - INFO - 
+Page 2:
+2025-11-03 14:48:23,394 - INFO -   Text lines: 31
+2025-11-03 14:48:23,394 - INFO -   Text length: 2521 characters
+2025-11-03 14:48:23,394 - INFO -   First 200 characters:
+2025-11-03 14:48:23,394 - INFO -     Promulgated by the Texas Real Estate Commission  (512) 936-3000   www.trec.texas.gov REI 7-6 (8/9/21)   NOTICE CONCERN ING HA ZARDOUS CONDITIONS, DEFIC I ENCIES, AND CONTRACTUA L AGREEM ENTS  Condit
+2025-11-03 14:48:23,394 - INFO -   Fonts: 9
+2025-11-03 14:48:23,394 - INFO - 
+Page 3:
+2025-11-03 14:48:23,402 - INFO -   Text lines: 35
+2025-11-03 14:48:23,402 - INFO -   Text length: 785 characters
+2025-11-03 14:48:23,402 - INFO -   First 200 characters:
+2025-11-03 14:48:23,402 - INFO -     Report Identification:  Promulgated by the Texas Real Estate Commission  (512) 936-3000   www.trec.texas.gov REI 7-6 (8/9/21)   I=Inspected NI=Not Inspected NP=Not Present D=Deficient  I. STRUCTURAL
+2025-11-03 14:48:23,402 - INFO -   Fonts: 8
+2025-11-03 14:48:23,402 - INFO - 
+================================================================================
+2025-11-03 14:48:23,402 - INFO - 5. FONTS AND RESOURCES ANALYSIS
+2025-11-03 14:48:23,402 - INFO - ================================================================================
+2025-11-03 14:48:23,407 - INFO - Unique fonts across all pages: 10
+2025-11-03 14:48:23,407 - INFO -   /C2_0
+2025-11-03 14:48:23,407 - INFO -   /C2_1
+2025-11-03 14:48:23,407 - INFO -   /C2_2
+2025-11-03 14:48:23,407 - INFO -   /C2_3
+2025-11-03 14:48:23,407 - INFO -   /C2_4
+2025-11-03 14:48:23,407 - INFO -   /TT0
+2025-11-03 14:48:23,407 - INFO -   /TT1
+2025-11-03 14:48:23,407 - INFO -   /TT2
+2025-11-03 14:48:23,407 - INFO -   /TT3
+2025-11-03 14:48:23,407 - INFO -   /TT4
+2025-11-03 14:48:23,407 - INFO - 
+Unique XObjects: 3
+2025-11-03 14:48:23,407 - INFO -   /Im0
+2025-11-03 14:48:23,407 - INFO -   /Im1
+2025-11-03 14:48:23,407 - INFO -   /Im2
+2025-11-03 14:48:23,407 - INFO - 
+================================================================================
+2025-11-03 14:48:23,407 - INFO - ANALYSIS SUMMARY
+2025-11-03 14:48:23,407 - INFO - ================================================================================
+2025-11-03 14:48:23,407 - INFO - 
+Basic Structure:
+2025-11-03 14:48:23,407 - INFO -   Pages: 6
+2025-11-03 14:48:23,407 - INFO -   Page size: 612.0 x 792.0 pts
+2025-11-03 14:48:23,407 - INFO -   Has form: True
+2025-11-03 14:48:23,407 - INFO - 
+Form Fields (pypdf):
+2025-11-03 14:48:23,407 - INFO -   Total fields: 250
+2025-11-03 14:48:23,407 - INFO -   Checkboxes: 144
+2025-11-03 14:48:23,407 - INFO -   Text fields: 72
+2025-11-03 14:48:23,407 - INFO - 
+Form Fields (pikepdf):
+2025-11-03 14:48:23,407 - INFO -   Top-level fields: 94
+2025-11-03 14:48:23,407 - INFO -   Total leaf fields: 245
+2025-11-03 14:48:23,408 - INFO -   Checkboxes: 144
+2025-11-03 14:48:23,408 - INFO - 
+================================================================================
+2025-11-03 14:48:23,408 - INFO - Analysis complete! Check analysis/template_blank_analysis.log for details
+2025-11-03 14:48:23,408 - INFO - ================================================================================
