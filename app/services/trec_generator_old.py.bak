@@ -1,0 +1,412 @@
+"""
+TREC PDF report generator service.
+
+Generates TREC-formatted PDF reports from inspection data.
+"""
+
+import logging
+from typing import Dict, Any, List, Optional
+from pathlib import Path
+from datetime import datetime
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+
+from app.services.image_handler import ImageHandler
+from app.utils.pdf_helpers import PDFHelper, PDFConstants
+
+
+logger = logging.getLogger(__name__)
+
+
+class TRECReportGenerator:
+    """Generate TREC-formatted PDF reports."""
+    
+    def __init__(self, config=None, output_dir: str = 'output'):
+        """
+        Initialize TREC report generator.
+        
+        Args:
+            config: Flask app config (optional)
+            output_dir: Directory for output files (used if config not provided)
+        """
+        if config:
+            self.output_dir = Path(config.get('OUTPUT_DIR', 'output'))
+        else:
+            self.output_dir = Path(output_dir)
+            
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.image_handler = ImageHandler()
+        self.page_number = 1
+        logger.info("Initialized TRECReportGenerator")
+    
+    def generate(self, parsed_data: Dict[str, Any], output_filename: str = 'output_pdf.pdf') -> str:
+        """
+        Generate TREC PDF report.
+        
+        Args:
+            parsed_data: Structured inspection data from parser
+            output_filename: Output PDF filename
+            
+        Returns:
+            Path to generated PDF file
+        """
+        logger.info("Starting TREC PDF generation")
+        
+        output_path = self.output_dir / output_filename
+        
+        try:
+            c = canvas.Canvas(str(output_path), pagesize=letter)
+            self.page_number = 1
+            
+            current_y = PDFConstants.PAGE_HEIGHT - PDFConstants.MARGIN_TOP
+            
+            current_y = self._render_header(c, parsed_data, current_y)
+            
+            current_y, self.page_number = PDFHelper.check_page_break(
+                c, current_y, 100, self.page_number
+            )
+            
+            current_y = self._render_overview(c, current_y)
+            
+            sections = parsed_data.get('sections', [])
+            logger.info(f"Rendering {len(sections)} sections")
+            
+            for idx, section in enumerate(sections):
+                current_y, self.page_number = PDFHelper.check_page_break(
+                    c, current_y, 150, self.page_number
+                )
+                
+                current_y = self._render_section(c, section, current_y)
+                
+                logger.debug(f"Rendered section {idx + 1}/{len(sections)}: {section.get('name')}")
+            
+            PDFHelper.draw_footer(c, self.page_number)
+            c.showPage()
+            c.save()
+            
+            logger.info(f"TREC PDF generated successfully: {output_path}")
+            return str(output_path)
+            
+        except Exception as e:
+            logger.error(f"Failed to generate TREC PDF: {str(e)}", exc_info=True)
+            raise
+    
+    def _render_header(self, c: canvas.Canvas, data: Dict[str, Any], y: float) -> float:
+        """
+        Render report header with property and inspector info.
+        
+        Args:
+            c: ReportLab Canvas
+            data: Parsed inspection data
+            y: Starting Y coordinate
+            
+        Returns:
+            New Y coordinate
+        """
+        logger.debug("Rendering header section")
+        
+        c.setFont(PDFConstants.FONT_TITLE, PDFConstants.FONT_SIZE_TITLE)
+        title = "PROPERTY INSPECTION REPORT"
+        title_width = c.stringWidth(title, PDFConstants.FONT_TITLE, PDFConstants.FONT_SIZE_TITLE)
+        c.drawString((PDFConstants.PAGE_WIDTH - title_width) / 2, y, title)
+        y -= 30
+        
+        metadata = data.get('metadata', {})
+        property_info = data.get('property', {})
+        inspector = data.get('inspector', {})
+        client = data.get('client', {})
+        
+        c.setFont(PDFConstants.FONT_HEADER, PDFConstants.FONT_SIZE_BODY)
+        c.drawString(PDFConstants.MARGIN_LEFT, y, "PROPERTY ADDRESS:")
+        y -= PDFConstants.LINE_HEIGHT_BODY
+        
+        c.setFont(PDFConstants.FONT_BODY, PDFConstants.FONT_SIZE_BODY)
+        c.drawString(PDFConstants.MARGIN_LEFT + 20, y, property_info.get('full_address', 'N/A'))
+        y -= PDFConstants.LINE_HEIGHT_BODY + 5
+        
+        c.setFont(PDFConstants.FONT_HEADER, PDFConstants.FONT_SIZE_BODY)
+        c.drawString(PDFConstants.MARGIN_LEFT, y, "INSPECTION DATE:")
+        c.setFont(PDFConstants.FONT_BODY, PDFConstants.FONT_SIZE_BODY)
+        c.drawString(PDFConstants.MARGIN_LEFT + 120, y, metadata.get('date', 'N/A'))
+        y -= PDFConstants.LINE_HEIGHT_BODY + 5
+        
+        c.setFont(PDFConstants.FONT_HEADER, PDFConstants.FONT_SIZE_BODY)
+        c.drawString(PDFConstants.MARGIN_LEFT, y, "INSPECTOR:")
+        c.setFont(PDFConstants.FONT_BODY, PDFConstants.FONT_SIZE_BODY)
+        c.drawString(PDFConstants.MARGIN_LEFT + 120, y, inspector.get('name', 'N/A'))
+        y -= PDFConstants.LINE_HEIGHT_BODY
+        
+        c.setFont(PDFConstants.FONT_BODY, PDFConstants.FONT_SIZE_SMALL)
+        c.drawString(PDFConstants.MARGIN_LEFT + 120, y, f"Email: {inspector.get('email', 'N/A')}")
+        y -= PDFConstants.LINE_HEIGHT_SMALL + 5
+        
+        c.setFont(PDFConstants.FONT_HEADER, PDFConstants.FONT_SIZE_BODY)
+        c.drawString(PDFConstants.MARGIN_LEFT, y, "CLIENT:")
+        c.setFont(PDFConstants.FONT_BODY, PDFConstants.FONT_SIZE_BODY)
+        c.drawString(PDFConstants.MARGIN_LEFT + 120, y, client.get('name', 'N/A'))
+        y -= PDFConstants.LINE_HEIGHT_BODY + 10
+        
+        c.setStrokeColor(PDFConstants.COLOR_BLACK)
+        c.setLineWidth(1)
+        c.line(PDFConstants.MARGIN_LEFT, y, PDFConstants.PAGE_WIDTH - PDFConstants.MARGIN_RIGHT, y)
+        y -= 20
+        
+        logger.debug(f"Header rendered, new y={y}")
+        return y
+    
+    def _render_overview(self, c: canvas.Canvas, y: float) -> float:
+        """
+        Render inspection overview section.
+        
+        Args:
+            c: ReportLab Canvas
+            y: Starting Y coordinate
+            
+        Returns:
+            New Y coordinate
+        """
+        logger.debug("Rendering overview section")
+        
+        y = PDFHelper.draw_header(c, "INSPECTION OVERVIEW", y, PDFConstants.FONT_SIZE_SECTION)
+        y -= 5
+        
+        overview_text = (
+            "This inspection report has been prepared for the exclusive use of the client named above. "
+            "This report describes the condition of the property at the time of inspection and "
+            "identifies items that were not functioning properly, were significantly deficient, "
+            "posed a safety hazard, or were in need of immediate major repair."
+        )
+        
+        y = PDFHelper.draw_wrapped_text(
+            c, overview_text,
+            PDFConstants.MARGIN_LEFT, y,
+            PDFConstants.CONTENT_WIDTH,
+            PDFConstants.FONT_BODY,
+            PDFConstants.FONT_SIZE_SMALL,
+            PDFConstants.LINE_HEIGHT_SMALL
+        )
+        y -= 15
+        
+        c.setFont(PDFConstants.FONT_HEADER, PDFConstants.FONT_SIZE_SMALL)
+        c.drawString(PDFConstants.MARGIN_LEFT, y, "INSPECTION STATUS KEY:")
+        y -= PDFConstants.LINE_HEIGHT_SMALL + 3
+        
+        c.setFont(PDFConstants.FONT_BODY, PDFConstants.FONT_SIZE_SMALL)
+        status_items = [
+            "I = Inspected",
+            "NI = Not Inspected",
+            "D = Deficient",
+            "NP = Not Present"
+        ]
+        
+        for item in status_items:
+            c.drawString(PDFConstants.MARGIN_LEFT + 20, y, f"• {item}")
+            y -= PDFConstants.LINE_HEIGHT_SMALL
+        
+        y -= 15
+        
+        logger.debug(f"Overview rendered, new y={y}")
+        return y
+    
+    def _render_section(self, c: canvas.Canvas, section: Dict[str, Any], y: float) -> float:
+        """
+        Render a complete inspection section.
+        
+        Args:
+            c: ReportLab Canvas
+            section: Section data
+            y: Starting Y coordinate
+            
+        Returns:
+            New Y coordinate
+        """
+        section_name = section.get('name', 'Unknown Section')
+        section_number = section.get('section_number', '')
+        
+        logger.debug(f"Rendering section: {section_number} - {section_name}")
+        
+        header_text = f"{section_number}. {section_name}"
+        y = PDFHelper.draw_header(c, header_text, y, PDFConstants.FONT_SIZE_SUBSECTION)
+        y -= 5
+        
+        line_items = section.get('line_items', [])
+        
+        for item in line_items:
+            y, self.page_number = PDFHelper.check_page_break(
+                c, y, 80, self.page_number
+            )
+            
+            y = self._render_line_item(c, item, y)
+        
+        y -= 10
+        
+        return y
+    
+    def _render_line_item(self, c: canvas.Canvas, item: Dict[str, Any], y: float) -> float:
+        """
+        Render a line item with status checkboxes.
+        
+        Args:
+            c: ReportLab Canvas
+            item: Line item data
+            y: Starting Y coordinate
+            
+        Returns:
+            New Y coordinate
+        """
+        item_name = item.get('name', 'Unknown Item')
+        status = item.get('inspection_status')
+        
+        logger.debug(f"Rendering line item: {item_name} (status: {status})")
+        
+        checkbox_x = PDFConstants.MARGIN_LEFT + 20
+        text_x = checkbox_x + 150
+        
+        PDFHelper.draw_inspection_status(c, checkbox_x, y, status)
+        
+        c.setFont(PDFConstants.FONT_BODY, PDFConstants.FONT_SIZE_SMALL)
+        c.drawString(text_x, y - PDFConstants.CHECKBOX_SIZE, item_name)
+        y -= PDFConstants.LINE_HEIGHT_SMALL + 5
+        
+        comments = item.get('comments', [])
+        if comments:
+            y = self._render_comments(c, comments, y)
+        
+        return y
+    
+    def _render_comments(self, c: canvas.Canvas, comments: List[Dict[str, Any]], y: float) -> float:
+        """
+        Render comments for a line item.
+        
+        Args:
+            c: ReportLab Canvas
+            comments: List of comment data
+            y: Starting Y coordinate
+            
+        Returns:
+            New Y coordinate
+        """
+        logger.debug(f"Rendering {len(comments)} comments")
+        
+        comment_x = PDFConstants.MARGIN_LEFT + 40
+        comment_width = PDFConstants.CONTENT_WIDTH - 60
+        
+        for comment in comments:
+            y, self.page_number = PDFHelper.check_page_break(
+                c, y, 60, self.page_number
+            )
+            
+            text = comment.get('text', '')
+            if text:
+                c.setFont(PDFConstants.FONT_ITALIC, PDFConstants.FONT_SIZE_SMALL)
+                c.drawString(comment_x, y, "Comment:")
+                y -= PDFConstants.LINE_HEIGHT_SMALL
+                
+                c.setFont(PDFConstants.FONT_BODY, PDFConstants.FONT_SIZE_SMALL)
+                y = PDFHelper.draw_wrapped_text(
+                    c, text,
+                    comment_x + 10, y,
+                    comment_width - 10,
+                    PDFConstants.FONT_BODY,
+                    PDFConstants.FONT_SIZE_SMALL,
+                    PDFConstants.LINE_HEIGHT_SMALL
+                )
+                y -= 5
+            
+            recommendation = comment.get('recommendation', '')
+            if recommendation:
+                c.setFont(PDFConstants.FONT_ITALIC, PDFConstants.FONT_SIZE_SMALL)
+                c.drawString(comment_x, y, "Recommendation:")
+                y -= PDFConstants.LINE_HEIGHT_SMALL
+                
+                c.setFont(PDFConstants.FONT_BODY, PDFConstants.FONT_SIZE_SMALL)
+                y = PDFHelper.draw_wrapped_text(
+                    c, recommendation,
+                    comment_x + 10, y,
+                    comment_width - 10,
+                    PDFConstants.FONT_BODY,
+                    PDFConstants.FONT_SIZE_SMALL,
+                    PDFConstants.LINE_HEIGHT_SMALL
+                )
+                y -= 5
+            
+            photos = comment.get('photos', [])
+            if photos:
+                y = self._render_photos(c, photos, y, comment_x)
+            
+            y -= 5
+        
+        return y
+    
+    def _render_photos(self, c: canvas.Canvas, photos: List[str], y: float, x: float) -> float:
+        """
+        Render photos from URLs or photo dictionaries.
+        
+        Args:
+            c: ReportLab Canvas
+            photos: List of photo URLs or photo dictionaries with 'url' key
+            y: Starting Y coordinate
+            x: X coordinate
+            
+        Returns:
+            New Y coordinate
+        """
+        logger.debug(f"Rendering {len(photos)} photos")
+        
+        max_photos_per_row = 2
+        photo_width = 150
+        photo_height = 120
+        photo_spacing = 10
+        
+        for i, photo in enumerate(photos[:4]):
+            # Extract URL from photo dictionary or use photo directly if it's a string
+            if isinstance(photo, dict):
+                photo_url = photo.get('url', '')
+            else:
+                photo_url = photo
+                
+            if not photo_url:
+                logger.debug(f"Skipping photo {i+1} - no URL found")
+                continue
+            
+            if i > 0 and i % max_photos_per_row == 0:
+                y -= photo_height + photo_spacing
+                
+                y, self.page_number = PDFHelper.check_page_break(
+                    c, y, photo_height + 20, self.page_number
+                )
+            
+            col = i % max_photos_per_row
+            photo_x = x + col * (photo_width + photo_spacing)
+            
+            try:
+                image_reader = self.image_handler.get_image_reader(photo_url)
+                
+                if image_reader:
+                    c.drawImage(
+                        image_reader,
+                        photo_x,
+                        y - photo_height,
+                        width=photo_width,
+                        height=photo_height,
+                        preserveAspectRatio=True
+                    )
+                    logger.debug(f"Embedded image from {photo_url}")
+                else:
+                    c.setFont(PDFConstants.FONT_ITALIC, PDFConstants.FONT_SIZE_SMALL)
+                    c.setFillColor(PDFConstants.COLOR_GRAY)
+                    c.drawString(photo_x, y - photo_height/2, "[Image unavailable]")
+                    c.setFillColor(PDFConstants.COLOR_BLACK)
+                    
+            except Exception as e:
+                logger.warning(f"Failed to embed image {photo_url}: {str(e)}")
+                c.setFont(PDFConstants.FONT_ITALIC, PDFConstants.FONT_SIZE_SMALL)
+                c.setFillColor(PDFConstants.COLOR_GRAY)
+                c.drawString(photo_x, y - photo_height/2, "[Image error]")
+                c.setFillColor(PDFConstants.COLOR_BLACK)
+        
+        num_rows = (min(len(photos), 4) + max_photos_per_row - 1) // max_photos_per_row
+        y -= num_rows * (photo_height + photo_spacing)
+        
+        return y
