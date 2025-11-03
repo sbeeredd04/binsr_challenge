@@ -1,0 +1,2 @@
+2025-11-03 14:29:42,045 - ERROR - Missing required library: No module named 'pikepdf'
+2025-11-03 14:29:42,045 - INFO - Install with: pip install pypdf pikepdf
