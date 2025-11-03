@@ -1,0 +1,164 @@
+2025-11-03 15:03:38,675 - INFO - ================================================================================
+2025-11-03 15:03:38,675 - INFO - ANALYZING: assets/inspection.json
+2025-11-03 15:03:38,675 - INFO - ================================================================================
+2025-11-03 15:03:38,675 - INFO - 
+Loading JSON file...
+2025-11-03 15:03:38,677 - INFO - ✓ Loaded successfully
+2025-11-03 15:03:38,677 - INFO - 
+================================================================================
+2025-11-03 15:03:38,677 - INFO - 1. OVERALL STRUCTURE ANALYSIS
+2025-11-03 15:03:38,677 - INFO - ================================================================================
+2025-11-03 15:03:38,677 - INFO - Top-level keys: ['inspection', 'account']
+2025-11-03 15:03:38,677 - INFO -   inspection: dict with 18 keys
+2025-11-03 15:03:38,677 - INFO -   account: dict with 9 keys
+2025-11-03 15:03:38,677 - INFO - 
+================================================================================
+2025-11-03 15:03:38,677 - INFO - 2. INSPECTION METADATA ANALYSIS
+2025-11-03 15:03:38,677 - INFO - ================================================================================
+2025-11-03 15:03:38,677 - INFO - Inspection ID: 222a19173e9248d0b41984849bd93e2f1af0b57f2c1
+2025-11-03 15:03:38,677 - INFO - Status: in_progress
+2025-11-03 15:03:38,677 - INFO - 
+Client:
+2025-11-03 15:03:38,677 - INFO -   Name: Binsr Demo
+2025-11-03 15:03:38,677 - INFO -   Email: TestEmail@gmail.com
+2025-11-03 15:03:38,677 - INFO -   Phone: 5103811725
+2025-11-03 15:03:38,677 - INFO - 
+Inspector:
+2025-11-03 15:03:38,677 - INFO -   Name: Binsr
+2025-11-03 15:03:38,677 - INFO -   Email: BinsrTest@gmail.com
+2025-11-03 15:03:38,677 - INFO - 
+Property:
+2025-11-03 15:03:38,677 - INFO -   Address: 251 N Bristol Ave, Los Angeles, CA 90049
+2025-11-03 15:03:38,677 - INFO -   City: Los Angeles, CA 90049
+2025-11-03 15:03:38,677 - INFO - 
+Schedule:
+2025-11-03 15:03:38,678 - INFO -   Date: 1755090000000
+2025-11-03 15:03:38,678 - INFO - 
+Header Image: Yes
+2025-11-03 15:03:38,678 - INFO - 
+================================================================================
+2025-11-03 15:03:38,678 - INFO - 3. SECTIONS AND LINE ITEMS ANALYSIS
+2025-11-03 15:03:38,678 - INFO - ================================================================================
+2025-11-03 15:03:38,678 - INFO - Total sections: 18
+2025-11-03 15:03:38,678 - INFO - Total line items across all sections: 139
+2025-11-03 15:03:38,678 - INFO - 
+Section breakdown:
+2025-11-03 15:03:38,678 - INFO -   1. Section 1: Inspection Report Overview
+2025-11-03 15:03:38,678 - INFO -      Line items: 1
+2025-11-03 15:03:38,678 - INFO -   2. Section 2: General Inspection Disclosures
+2025-11-03 15:03:38,678 - INFO -      Line items: 1
+2025-11-03 15:03:38,678 - INFO -   3. Section 3: Property Assessment Details
+2025-11-03 15:03:38,678 - INFO -      Line items: 1
+2025-11-03 15:03:38,678 - INFO -   4. Section 4: Ground-Level Exterior Structures
+2025-11-03 15:03:38,678 - INFO -      Line items: 18
+2025-11-03 15:03:38,678 - INFO -   5. Section 5: Roofing System Assessment
+2025-11-03 15:03:38,678 - INFO -      Line items: 12
+2025-11-03 15:03:38,678 - INFO -   6. Section 6: Integrated Appliances
+2025-11-03 15:03:38,678 - INFO -      Line items: 12
+2025-11-03 15:03:38,678 - INFO -   7. Section 7: Interior Elements: Doors, Windows, and Walls
+2025-11-03 15:03:38,678 - INFO -      Line items: 12
+2025-11-03 15:03:38,678 - INFO -   8. Section 8: Building Foundation and Structural Components
+2025-11-03 15:03:38,678 - INFO -      Line items: 5
+2025-11-03 15:03:38,678 - INFO -   9. Section 9: Crawlspace Assessment
+2025-11-03 15:03:38,678 - INFO -      Line items: 5
+2025-11-03 15:03:38,678 - INFO -   10. Section 10: Fireplace and Venting Systems
+2025-11-03 15:03:38,678 - INFO -      Line items: 2
+2025-11-03 15:03:38,678 - INFO -   11. Section 11: Water and Waste Systems
+2025-11-03 15:03:38,678 - INFO -      Line items: 17
+2025-11-03 15:03:38,678 - INFO -   12. Section 12: Electrical Systems
+2025-11-03 15:03:38,678 - INFO -      Line items: 7
+2025-11-03 15:03:38,678 - INFO -   13. Section 13: Overhead Space Assessment
+2025-11-03 15:03:38,678 - INFO -      Line items: 4
+2025-11-03 15:03:38,678 - INFO -   14. Section 14: Heating, Ventilation, and Air Conditioning Systems
+2025-11-03 15:03:38,678 - INFO -      Line items: 11
+2025-11-03 15:03:38,678 - INFO -   15. Section 15: Garage Systems and Components
+2025-11-03 15:03:38,678 - INFO -      Line items: 6
+2025-11-03 15:03:38,678 - INFO -   16. Section 16: Detached Structures
+2025-11-03 15:03:38,678 - INFO -      Line items: 16
+2025-11-03 15:03:38,678 - INFO -   17. Section 17: General Observations, Environmental, and Pest Considerations
+2025-11-03 15:03:38,678 - INFO -      Line items: 1
+2025-11-03 15:03:38,678 - INFO -   18. Section 18: Inspection Completion Summary
+2025-11-03 15:03:38,678 - INFO -      Line items: 8
+2025-11-03 15:03:38,678 - INFO - 
+--------------------------------------------------------------------------------
+2025-11-03 15:03:38,678 - INFO - LINE ITEM STRUCTURE ANALYSIS
+2025-11-03 15:03:38,678 - INFO - --------------------------------------------------------------------------------
+2025-11-03 15:03:38,678 - INFO - Sample line item structure (first item):
+2025-11-03 15:03:38,678 - INFO -   Keys: ['id', 'name', 'title', 'lineItemNumber', 'order', 'itemType', 'inspectionStatus', 'isDeficient', 'linkedTo', 'linkedToType', 'linkedToName', 'comments', 'media']
+2025-11-03 15:03:38,678 - INFO -     id: str
+2025-11-03 15:03:38,678 - INFO -     name: str
+2025-11-03 15:03:38,678 - INFO -     title: str
+2025-11-03 15:03:38,679 - INFO -     lineItemNumber: int
+2025-11-03 15:03:38,679 - INFO -     order: int
+2025-11-03 15:03:38,679 - INFO -     itemType: str
+2025-11-03 15:03:38,679 - INFO -     inspectionStatus: NoneType
+2025-11-03 15:03:38,679 - INFO -     isDeficient: bool
+2025-11-03 15:03:38,679 - INFO -     linkedTo: NoneType
+2025-11-03 15:03:38,679 - INFO -     linkedToType: NoneType
+2025-11-03 15:03:38,679 - INFO -     linkedToName: NoneType
+2025-11-03 15:03:38,679 - INFO -     comments: list with 3 items
+2025-11-03 15:03:38,679 - INFO -     media: list with 0 items
+2025-11-03 15:03:38,679 - INFO - 
+================================================================================
+2025-11-03 15:03:38,679 - INFO - 4. MEDIA CONTENT ANALYSIS
+2025-11-03 15:03:38,679 - INFO - ================================================================================
+2025-11-03 15:03:38,679 - INFO - Items with media: 0
+2025-11-03 15:03:38,679 - INFO - Total images: 0
+2025-11-03 15:03:38,679 - INFO - Total videos: 0
+2025-11-03 15:03:38,679 - INFO - 
+================================================================================
+2025-11-03 15:03:38,679 - INFO - 5. STATUS DISTRIBUTION ANALYSIS
+2025-11-03 15:03:38,679 - INFO - ================================================================================
+2025-11-03 15:03:38,679 - INFO - Total items with status: 139
+2025-11-03 15:03:38,679 - INFO - 
+Status distribution:
+2025-11-03 15:03:38,679 - INFO -   unknown: 139 (100.0%)
+2025-11-03 15:03:38,679 - INFO - 
+================================================================================
+2025-11-03 15:03:38,679 - INFO - 6. MAPPING TO TREC REQUIREMENTS
+2025-11-03 15:03:38,679 - INFO - ================================================================================
+2025-11-03 15:03:38,679 - INFO - 
+TREC Report Pages Breakdown:
+2025-11-03 15:03:38,679 - INFO -   Pages 1-3: Header, property info, disclaimers
+2025-11-03 15:03:38,679 - INFO -   Pages 4-6: Inspection items with checkboxes (I/NI/NP/D)
+2025-11-03 15:03:38,679 - INFO -   Subsequent pages: Additional items, summary
+2025-11-03 15:03:38,679 - INFO - 
+Total inspection items to map: 139
+2025-11-03 15:03:38,679 - INFO - Items per page (approximate): ~35-40
+2025-11-03 15:03:38,679 - INFO - Estimated pages needed for items: 4.0
+2025-11-03 15:03:38,679 - INFO - 
+Data Mapping Requirements:
+2025-11-03 15:03:38,679 - INFO -   ✓ Client info → Header (Page 1)
+2025-11-03 15:03:38,679 - INFO -   ✓ Inspector info → Header (Page 1)
+2025-11-03 15:03:38,679 - INFO -   ✓ Property address → Header (Page 1)
+2025-11-03 15:03:38,679 - INFO -   ✓ Line items → Inspection pages (4-6+)
+2025-11-03 15:03:38,679 - INFO -   ✓ Status values → Checkbox columns (I/NI/NP/D)
+2025-11-03 15:03:38,679 - INFO -   ✓ Comments → Comment fields
+2025-11-03 15:03:38,679 - INFO -   ✓ Images → Embedded in PDF
+2025-11-03 15:03:38,679 - INFO -   ✓ Videos → QR codes linking to videos
+2025-11-03 15:03:38,679 - INFO - 
+Status to Checkbox Mapping:
+2025-11-03 15:03:38,679 - INFO -   'inspected' → I (Inspected)
+2025-11-03 15:03:38,679 - INFO -   'not_inspected' → NI (Not Inspected)
+2025-11-03 15:03:38,679 - INFO -   'not_present' → NP (Not Present)
+2025-11-03 15:03:38,679 - INFO -   'deficient' → D (Deficient)
+2025-11-03 15:03:38,679 - INFO - 
+================================================================================
+2025-11-03 15:03:38,679 - INFO - ANALYSIS SUMMARY
+2025-11-03 15:03:38,680 - INFO - ================================================================================
+2025-11-03 15:03:38,680 - INFO - 
+Structure:
+2025-11-03 15:03:38,680 - INFO -   Sections: 18
+2025-11-03 15:03:38,680 - INFO -   Line items: 139
+2025-11-03 15:03:38,680 - INFO - 
+Media:
+2025-11-03 15:03:38,680 - INFO -   Items with media: 0
+2025-11-03 15:03:38,680 - INFO -   Images: 0
+2025-11-03 15:03:38,680 - INFO -   Videos: 0
+2025-11-03 15:03:38,680 - INFO - 
+Status Distribution:
+2025-11-03 15:03:38,680 - INFO -   unknown: 139
+2025-11-03 15:03:38,680 - INFO - 
+================================================================================
+2025-11-03 15:03:38,680 - INFO - Analysis complete! Check analysis/inspection_json_analysis.log for details
+2025-11-03 15:03:38,680 - INFO - ================================================================================

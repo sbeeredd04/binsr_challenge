@@ -1,0 +1,113 @@
+2025-11-03 15:02:39,129 - INFO - pikepdf C++ to Python logger bridge initialized
+2025-11-03 15:02:39,160 - INFO - ================================================================================
+2025-11-03 15:02:39,160 - INFO - ANALYZING: assets/TREC_Sample_Filled.pdf
+2025-11-03 15:02:39,160 - INFO - ================================================================================
+2025-11-03 15:02:39,160 - INFO - 
+================================================================================
+2025-11-03 15:02:39,160 - INFO - 1. BASIC STRUCTURE ANALYSIS
+2025-11-03 15:02:39,160 - INFO - ================================================================================
+2025-11-03 15:02:39,169 - INFO - Total pages: 30
+2025-11-03 15:02:39,169 - INFO -   Page 1: 612.0 x 792.0 pts
+2025-11-03 15:02:39,169 - INFO -   Page 2: 612.0 x 792.0 pts
+2025-11-03 15:02:39,169 - INFO -   Page 3: 612.0 x 792.0 pts
+2025-11-03 15:02:39,169 - INFO -   Page 4: 612.0 x 792.0 pts
+2025-11-03 15:02:39,169 - INFO -   Page 5: 612.0 x 792.0 pts
+2025-11-03 15:02:39,169 - INFO -   ... (25 more pages)
+2025-11-03 15:02:39,169 - INFO - 
+File size: 5,615,447 bytes (5.36 MB)
+2025-11-03 15:02:39,169 - INFO - 
+Metadata:
+2025-11-03 15:02:39,169 - INFO -   /CreationDate: D:20230123002020Z
+2025-11-03 15:02:39,169 - INFO -   /Creator: pdf-lib (https://github.com/Hopding/pdf-lib)
+2025-11-03 15:02:39,169 - INFO -   /ModDate: D:20251031215243-07'00'
+2025-11-03 15:02:39,169 - INFO -   /Producer: pdf-lib (https://github.com/Hopding/pdf-lib)
+2025-11-03 15:02:39,169 - INFO - 
+================================================================================
+2025-11-03 15:02:39,169 - INFO - 2. FORM STATUS ANALYSIS
+2025-11-03 15:02:39,169 - INFO - ================================================================================
+2025-11-03 15:02:39,172 - INFO - NO FORM FIELDS - This PDF is flattened
+2025-11-03 15:02:39,172 - INFO - Form fields have been converted to static content
+2025-11-03 15:02:39,172 - INFO - 
+================================================================================
+2025-11-03 15:02:39,172 - INFO - 3. IMAGES AND MEDIA ANALYSIS
+2025-11-03 15:02:39,172 - INFO - ================================================================================
+2025-11-03 15:02:39,186 - INFO - Total embedded images: 125
+2025-11-03 15:02:39,186 - INFO - 
+Image details (first 10):
+2025-11-03 15:02:39,186 - INFO -   1. Page 1: 302x251 pixels, 8 bits, /DeviceRGB
+2025-11-03 15:02:39,186 - INFO -   2. Page 2: 600x450 pixels, 8 bits, /DeviceRGB
+2025-11-03 15:02:39,187 - INFO -   3. Page 2: 600x450 pixels, 8 bits, /DeviceRGB
+2025-11-03 15:02:39,187 - INFO -   4. Page 2: 600x450 pixels, 8 bits, /DeviceRGB
+2025-11-03 15:02:39,187 - INFO -   5. Page 3: 600x450 pixels, 8 bits, /DeviceRGB
+2025-11-03 15:02:39,187 - INFO -   6. Page 3: 505x600 pixels, 8 bits, /DeviceRGB
+2025-11-03 15:02:39,187 - INFO -   7. Page 5: 500x267 pixels, 8 bits, /DeviceRGB
+2025-11-03 15:02:39,187 - INFO -   8. Page 6: 600x601 pixels, 8 bits, /DeviceRGB
+2025-11-03 15:02:39,187 - INFO -   9. Page 6: 600x450 pixels, 8 bits, /DeviceRGB
+2025-11-03 15:02:39,187 - INFO -   10. Page 6: 18x18 pixels, 8 bits, /DeviceRGB
+2025-11-03 15:02:39,187 - INFO - 
+================================================================================
+2025-11-03 15:02:39,187 - INFO - 4. CONTENT LAYERING ANALYSIS
+2025-11-03 15:02:39,187 - INFO - ================================================================================
+2025-11-03 15:02:39,189 - INFO - Analyzing Page 4 (first inspection content page):
+2025-11-03 15:02:39,189 - INFO -   Single content stream
+2025-11-03 15:02:39,190 - INFO -   Annotations: 1
+2025-11-03 15:02:39,190 - INFO -   XObjects: 0 (images, forms)
+2025-11-03 15:02:39,190 - INFO -   Fonts: 5
+2025-11-03 15:02:39,190 - INFO - 
+================================================================================
+2025-11-03 15:02:39,190 - INFO - 5. TEXT CONTENT ANALYSIS
+2025-11-03 15:02:39,190 - INFO - ================================================================================
+2025-11-03 15:02:39,265 - INFO - Page 4 text analysis:
+2025-11-03 15:02:39,265 - INFO -   Total characters: 3611
+2025-11-03 15:02:39,265 - INFO -   Lines: 34
+2025-11-03 15:02:39,265 - INFO -   Checkbox indicators found: '●': 2, 'x': 6, '4': 2, '8': 3
+2025-11-03 15:02:39,265 - INFO - 
+  First 300 characters:
+2025-11-03 15:02:39,265 - INFO -     . 
+REI 7-6 (8/9/2021) Promulgated by the Texas Real Estate Commission ● (512) 936-3000 ● www.trec.texas.gov
+The Report Tools can be used in conjunction with the Repair Cost Guide below to make cost estimations for requested repairs
+and/or treatments. 
+Further Evaluation:It is highly recommended that
+2025-11-03 15:02:39,265 - INFO - 
+================================================================================
+2025-11-03 15:02:39,265 - INFO - 6. COMPARISON WITH BLANK TEMPLATE
+2025-11-03 15:02:39,265 - INFO - ================================================================================
+2025-11-03 15:02:39,279 - INFO - Template pages: 6
+2025-11-03 15:02:39,280 - INFO - Filled pages: 30
+2025-11-03 15:02:39,280 - INFO - Additional pages: 24
+2025-11-03 15:02:39,280 - INFO - 
+File size comparison:
+2025-11-03 15:02:39,280 - INFO -   Template: 620,865 bytes (606.3 KB)
+2025-11-03 15:02:39,280 - INFO -   Filled: 5,615,447 bytes (5.36 MB)
+2025-11-03 15:02:39,280 - INFO -   Ratio: 9.0x larger
+2025-11-03 15:02:39,332 - INFO - 
+Form fields comparison:
+2025-11-03 15:02:39,332 - INFO -   Template fields: 250
+2025-11-03 15:02:39,332 - INFO -   Filled fields: 0
+2025-11-03 15:02:39,332 - INFO -   ✓ Filled PDF is flattened (form fields removed)
+2025-11-03 15:02:39,332 - INFO - 
+================================================================================
+2025-11-03 15:02:39,332 - INFO - ANALYSIS SUMMARY
+2025-11-03 15:02:39,332 - INFO - ================================================================================
+2025-11-03 15:02:39,332 - INFO - 
+Basic Structure:
+2025-11-03 15:02:39,332 - INFO -   Pages: 30
+2025-11-03 15:02:39,332 - INFO -   File size: 5.36 MB
+2025-11-03 15:02:39,333 - INFO -   Page size: 612.0 x 792.0 pts
+2025-11-03 15:02:39,333 - INFO - 
+Form Status:
+2025-11-03 15:02:39,333 - INFO -   Is flattened: True
+2025-11-03 15:02:39,333 - INFO -   Field count: 0
+2025-11-03 15:02:39,333 - INFO - 
+Media Content:
+2025-11-03 15:02:39,333 - INFO -   Total images: 125
+2025-11-03 15:02:39,333 - INFO - 
+================================================================================
+2025-11-03 15:02:39,333 - INFO - KEY FINDINGS:
+2025-11-03 15:02:39,333 - INFO - ================================================================================
+2025-11-03 15:02:39,333 - INFO - ✓ Sample PDF is FLATTENED - form fields converted to static content
+2025-11-03 15:02:39,333 - INFO - ✓ Contains 125 embedded images
+2025-11-03 15:02:39,333 - INFO - 
+================================================================================
+2025-11-03 15:02:39,333 - INFO - Analysis complete! Check analysis/sample_filled_analysis.log for details
+2025-11-03 15:02:39,333 - INFO - ================================================================================
