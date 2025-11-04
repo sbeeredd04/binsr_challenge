@@ -7,7 +7,6 @@
  */
 
 import { TRECGenerator } from './services/TRECGenerator';
-import { Validator } from './utils/validator';
 import { FileUtils } from './utils/fileUtils';
 import { PATHS } from './config/constants';
 import { InspectionData } from './types/inspection';

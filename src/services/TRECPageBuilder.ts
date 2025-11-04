@@ -460,7 +460,7 @@ export class TRECPageBuilder {
   }
 
   /**
-   * Add footer (WITH REI and hyperlinks)
+   * Add footer (NO property address, just page number, REI, and hyperlink)
    */
   private addPageFooter(page: PDFPage, pageNum: number, totalPages: number, propertyAddress: string): void {
     const ftr = this.templateFormat!.footerText;
@@ -472,16 +472,7 @@ export class TRECPageBuilder {
       thickness: 0.5
     });
 
-    if (propertyAddress) {
-      const addr = propertyAddress.length > 45 ? propertyAddress.substring(0, 42) + '...' : propertyAddress;
-      page.drawText(addr, {
-        x: MARGIN,
-        y: footerY,
-        size: 8,
-        font: this.font!
-      });
-    }
-
+    // Page number (center)
     const pageText = `Page ${pageNum} of ${totalPages}`;
     const pageWidth = this.font!.widthOfTextAtSize(pageText, 10);
     page.drawText(pageText, {
@@ -491,6 +482,7 @@ export class TRECPageBuilder {
       font: this.font!
     });
 
+    // REI (bottom left)
     page.drawText(ftr.rei, {
       x: MARGIN,
       y: footerY - 12,
@@ -498,6 +490,7 @@ export class TRECPageBuilder {
       font: this.font!
     });
 
+    // Promulgated (bottom right) with hyperlink
     const promWidth = this.font!.widthOfTextAtSize(ftr.promulgated, 9);
     const promX = PAGE_WIDTH - MARGIN - promWidth;
     page.drawText(ftr.promulgated, {
