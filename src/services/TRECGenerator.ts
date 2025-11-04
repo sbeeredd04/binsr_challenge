@@ -8,8 +8,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { DataMapper } from '../mappers/DataMapper';
 import { FormFiller } from './FormFiller';
-import { ContentPageGenerator } from './ContentPageGenerator';
-import { PageHeaderFooter } from './PageHeaderFooter';
+import { TRECPageBuilder } from './TRECPageBuilder';
 import { Logger } from '../utils/logger';
 import { Validator } from '../utils/validator';
 import { FileUtils } from '../utils/fileUtils';
@@ -61,46 +60,42 @@ export class TRECGenerator {
       this.logger.info(`  With photos: ${summary.itemsWithPhotos}`);
       this.logger.info(`  With videos: ${summary.itemsWithVideos}`);
 
-      // Step 5: Fill form fields
-      this.logger.info('Step 5: Filling form fields...');
+      // Step 5: Fill header fields only (pages 1-2)
+      this.logger.info('Step 5: Filling header fields on pages 1-2...');
       const formFiller = new FormFiller(pdfDoc, form);
       
-      // Optional: List all fields for debugging
-      const formStats = formFiller.getFormStats();
-      this.logger.info(`  Form fields: ${formStats.totalFields} total (${formStats.textFields} text, ${formStats.checkboxes} checkboxes)`);
-      
-      await formFiller.fillForm(formData);
+      // Fill only header fields (not checkboxes - we'll generate those dynamically)
+      await formFiller.fillHeaderFields(formData);
+      this.logger.success('Header fields filled');
 
-      // Step 6: Generate content pages (comments → images → videos per item)
-      const hasContent = summary.itemsWithPhotos > 0 || 
-                         summary.itemsWithVideos > 0 || 
-                         formData.items.some(item => item.comments && item.comments.length > 0);
-      
-      if (hasContent) {
-        this.logger.info('Step 6: Generating content pages (comments, images, videos)...');
-        const contentGenerator = new ContentPageGenerator(pdfDoc);
-        const contentStats = await contentGenerator.generateContentPages(formData.items);
-        this.logger.info(`  Content pages: ${contentStats.pagesAdded} pages added`);
-        this.logger.info(`  Comments: ${contentStats.commentsAdded}`);
-        this.logger.info(`  Images: ${contentStats.imagesAdded}`);
-        this.logger.info(`  Videos: ${contentStats.videosAdded}`);
-      } else {
-        this.logger.info('Step 6: No content to add, skipping...');
-      }
-
-      // Step 7: Add page numbers and footers
-      this.logger.info('Step 7: Adding page numbers and footers...');
-      const pageHeaderFooter = new PageHeaderFooter(pdfDoc);
-      await pageHeaderFooter.addPageNumbersAndFooters(
-        'TREC Inspection Report',
-        formData.inspectorName,
-        formData.propertyAddress
-      );
-
-      // Step 8: Flatten form
-      this.logger.info('Step 8: Flattening PDF form...');
+      // Step 6: Flatten form BEFORE removing pages
+      this.logger.info('Step 6: Flattening form fields on pages 1-2...');
       form.flatten();
       this.logger.success('Form flattened (fields converted to static content)');
+
+      // Step 7: Remove template pages 3-6 (we'll regenerate them)
+      this.logger.info('Step 7: Removing template pages 3-6...');
+      const originalPageCount = pdfDoc.getPageCount();
+      if (originalPageCount >= 6) {
+        // Remove pages 3-6 (indices 2-5)
+        for (let i = 0; i < 4; i++) {
+          pdfDoc.removePage(2); // Always remove index 2 (as pages shift down)
+        }
+        this.logger.success(`Removed 4 template pages, ${pdfDoc.getPageCount()} pages remaining`);
+      }
+
+      // Step 8: Build TREC pages dynamically with proper section flow
+      this.logger.info('Step 8: Building TREC inspection pages...');
+      this.logger.info('Format: Section Header → Checkboxes → Comments → Images → Videos');
+      
+      const pageBuilder = new TRECPageBuilder(pdfDoc);
+      const inspectionPages = await pageBuilder.buildTRECPages(
+        formData.items,
+        formData.propertyAddress,
+        3 // Start from page 3
+      );
+      
+      this.logger.success(`Built ${inspectionPages} inspection pages`);
 
       // Step 9: Ensure output directory exists
       this.logger.info('Step 9: Preparing output...');

@@ -23,7 +23,7 @@ export class FormFiller {
     this.logger.info('Starting form filling...');
     
     // Fill header fields
-    await this.fillHeaderFields(formData);
+    await this.fillHeaderFieldsInternal(formData);
     
     // Fill checkboxes for inspection items
     await this.fillCheckboxes(formData.items);
@@ -32,9 +32,16 @@ export class FormFiller {
   }
 
   /**
+   * Fill ONLY header fields (used when checkboxes are generated dynamically)
+   */
+  public async fillHeaderFields(formData: TRECFormData): Promise<void> {
+    await this.fillHeaderFieldsInternal(formData);
+  }
+
+  /**
    * Fill header text fields (pages 1-2)
    */
-  private async fillHeaderFields(formData: TRECFormData): Promise<void> {
+  private async fillHeaderFieldsInternal(formData: TRECFormData): Promise<void> {
     this.logger.info('Filling header fields...');
     
     const fieldMappings: Record<string, string> = {
