@@ -167,7 +167,7 @@ export function mapItemsToTemplate(items: TRECItem[]): Map<number, TRECItem[]> {
       const page = subsection.page;
       if (!pageItems.has(page)) {
         pageItems.set(page, []);
-      }
+}
       pageItems.get(page)!.push(item);
     }
   }
