@@ -92,6 +92,7 @@ export class TRECGenerator {
       const inspectionPages = await pageBuilder.buildTRECPages(
         formData.items,
         formData.propertyAddress,
+        PATHS.TEMPLATE, // Pass template path for analysis
         3 // Start from page 3
       );
       
