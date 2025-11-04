@@ -18,6 +18,8 @@ async function main() {
   console.log('  Generates TREC inspection reports from JSON data');
   console.log('='.repeat(60) + '\n');
 
+  const startTime = Date.now();
+
   try {
     // Get command line arguments
     const args = process.argv.slice(2);
@@ -41,6 +43,12 @@ async function main() {
     const generator = new TRECGenerator();
     const pdfPath = await generator.generate(inspectionData, outputFile);
 
+    // Calculate time taken
+    const endTime = Date.now();
+    const timeTakenMs = endTime - startTime;
+    const timeTakenSec = (timeTakenMs / 1000).toFixed(2);
+    const timeTakenMin = (timeTakenMs / 60000).toFixed(2);
+
     // Success
     console.log('\n' + '='.repeat(60));
     console.log('✅ SUCCESS! TREC report generated successfully.');
@@ -49,6 +57,8 @@ async function main() {
     
     const sizeMB = await FileUtils.getFileSizeMB(pdfPath);
     console.log(`📊 File size: ${sizeMB.toFixed(2)} MB`);
+    console.log(`⏱️  Time taken: ${timeTakenSec}s (${timeTakenMin} minutes)`);
+    console.log(`⚡ Performance: ${(sizeMB / parseFloat(timeTakenSec)).toFixed(2)} MB/s`);
     console.log(`\n💡 Open the PDF to review the generated report.`);
     console.log('='.repeat(60) + '\n');
 

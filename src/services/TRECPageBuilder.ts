@@ -7,7 +7,7 @@
  * 4. Sections in template order
  */
 
-import { PDFDocument, PDFPage, PDFFont, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, PDFPage, PDFFont, PDFName, PDFString, rgb, StandardFonts } from 'pdf-lib';
 import * as QRCode from 'qrcode';
 import * as fs from 'fs/promises';
 import { Logger } from '../utils/logger';
@@ -122,6 +122,7 @@ export class TRECPageBuilder {
   private groupItemsByTRECSection(items: TRECItem[]): Map<string, TRECItem[]> {
     const groups = new Map<string, TRECItem[]>();
 
+    // Group items by section
     for (const item of items) {
       const subsection = TemplateAnalyzer.findSubsection(
         this.templateFormat!.sections,
@@ -143,6 +144,31 @@ export class TRECPageBuilder {
         groups.set(key, []);
       }
       groups.get(key)!.push(item);
+    }
+
+    // Sort items within each group by subsection letter (A, B, C, D, etc.)
+    for (const [sectionKey, sectionItems] of groups.entries()) {
+      sectionItems.sort((a, b) => {
+        const subA = TemplateAnalyzer.findSubsection(
+          this.templateFormat!.sections,
+          a.title,
+          a.section
+        );
+        const subB = TemplateAnalyzer.findSubsection(
+          this.templateFormat!.sections,
+          b.title,
+          b.section
+        );
+
+        // If both have subsections, sort by letter
+        if (subA && subB) {
+          return subA.letter.localeCompare(subB.letter);
+        }
+        // Items without subsections go last
+        if (subA) return -1;
+        if (subB) return 1;
+        return 0;
+      });
     }
 
     return groups;
@@ -367,42 +393,33 @@ export class TRECPageBuilder {
   }
 
   /**
-   * Add header (NO REI - only Promulgated)
+   * Add header (NO "Promulgated by..." text - removed per user request)
    */
   private addPageHeader(page: PDFPage): void {
     const hdr = this.templateFormat!.headerText;
 
-    // ONLY Promulgated text (NO REI)
-    const promWidth = this.font!.widthOfTextAtSize(hdr.promulgated, 9);
-    page.drawText(hdr.promulgated, {
-      x: PAGE_WIDTH - MARGIN - promWidth,
-      y: PAGE_HEIGHT - 18,
-      size: 9,
-      font: this.font!,
-      color: rgb(0, 0, 0)
-    });
-
+    // Top line (removed - no text here)
     page.drawLine({
-      start: { x: MARGIN, y: PAGE_HEIGHT - 23 },
-      end: { x: PAGE_WIDTH - MARGIN, y: PAGE_HEIGHT - 23 },
+      start: { x: MARGIN, y: PAGE_HEIGHT - 20 },
+      end: { x: PAGE_WIDTH - MARGIN, y: PAGE_HEIGHT - 20 },
       thickness: 1,
       color: rgb(0, 0, 0)
     });
 
     page.drawText(hdr.reportIdLabel, {
       x: MARGIN,
-      y: PAGE_HEIGHT - 38,
+      y: PAGE_HEIGHT - 35,
       size: 10,
       font: this.font!
     });
 
     page.drawLine({
-      start: { x: MARGIN + 140, y: PAGE_HEIGHT - 35 },
-      end: { x: PAGE_WIDTH - MARGIN, y: PAGE_HEIGHT - 35 },
+      start: { x: MARGIN + 140, y: PAGE_HEIGHT - 32 },
+      end: { x: PAGE_WIDTH - MARGIN, y: PAGE_HEIGHT - 32 },
       thickness: 0.5
     });
 
-    const legendY = PAGE_HEIGHT - 60;
+    const legendY = PAGE_HEIGHT - 55;
     
     page.drawRectangle({
       x: MARGIN,
@@ -443,7 +460,7 @@ export class TRECPageBuilder {
   }
 
   /**
-   * Add footer (WITH REI)
+   * Add footer (WITH REI and hyperlinks)
    */
   private addPageFooter(page: PDFPage, pageNum: number, totalPages: number, propertyAddress: string): void {
     const ftr = this.templateFormat!.footerText;
@@ -482,12 +499,39 @@ export class TRECPageBuilder {
     });
 
     const promWidth = this.font!.widthOfTextAtSize(ftr.promulgated, 9);
+    const promX = PAGE_WIDTH - MARGIN - promWidth;
     page.drawText(ftr.promulgated, {
-      x: PAGE_WIDTH - MARGIN - promWidth,
+      x: promX,
       y: footerY - 12,
       size: 9,
-      font: this.font!
+      font: this.font!,
+      color: rgb(0, 0, 0.8) // Slight blue tint for hyperlink
     });
+
+    // Add hyperlink annotation to the promulgated text (www.trec.texas.gov)
+    try {
+      const linkRect = {
+        x: promX,
+        y: footerY - 12,
+        width: promWidth,
+        height: 12
+      };
+      
+      page.node.set(PDFName.of('Annots'), this.pdfDoc.context.obj([
+        this.pdfDoc.context.obj({
+          Type: 'Annot',
+          Subtype: 'Link',
+          Rect: [linkRect.x, linkRect.y, linkRect.x + linkRect.width, linkRect.y + linkRect.height],
+          Border: [0, 0, 0],
+          A: {
+            S: 'URI',
+            URI: PDFString.of('https://www.trec.texas.gov')
+          }
+        })
+      ]));
+    } catch (error) {
+      // Hyperlink failed, but continue with text rendering
+    }
   }
 
   private addSubsectionWithCheckboxes(page: PDFPage, letter: string, item: TRECItem, y: number): number {
@@ -546,18 +590,28 @@ export class TRECPageBuilder {
   }
 
   private addCommentText(page: PDFPage, comment: string, y: number): number {
-    const lines = this.wrapText(comment, CONTENT_WIDTH - 40, 10);
+    // Split by actual newlines first, then wrap each line
+    const rawLines = comment.split(/\r?\n/).filter(l => l.trim());
     
-    for (const line of lines) {
-      page.drawText(`• ${line}`, {
-        x: MARGIN + 30,
-        y,
-        size: 10,
-        font: this.font!
-      });
-      y -= 13;
+    for (const rawLine of rawLines) {
+      const wrappedLines = this.wrapText(rawLine, CONTENT_WIDTH - 50, 10);
+      
+      for (let i = 0; i < wrappedLines.length; i++) {
+        const line = wrappedLines[i].trim();
+        if (line) {
+          // Add bullet only to first line of each raw line
+          const prefix = i === 0 ? '• ' : '  ';
+          page.drawText(`${prefix}${line}`, {
+            x: MARGIN + 25,
+            y,
+            size: 10,
+            font: this.font!
+          });
+          y -= 13;
+        }
+      }
     }
-
+    
     return y - 5;
   }
 
