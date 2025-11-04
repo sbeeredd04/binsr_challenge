@@ -34,70 +34,63 @@ export class DataMapper {
   }
 
   /**
-   * Extract all line items from all sections
+   * Extract all line items from all sections (optimized)
    */
   public getLineItems(): TRECItem[] {
-    const items: TRECItem[] = [];
     const inspection = this.inspectionData.inspection;
     
     if (!inspection.sections) {
       this.logger.warn('No sections found in inspection data');
-      return items;
+      return [];
     }
 
+    // Pre-calculate total size for better performance
+    const estimatedSize = inspection.sections.reduce(
+      (sum, s) => sum + (s.lineItems?.length || 0), 
+      0
+    );
+    
+    const items: TRECItem[] = new Array(estimatedSize);
+    let itemIndex = 0;
+
     for (const section of inspection.sections) {
-      if (!section.lineItems || section.lineItems.length === 0) {
+      if (!section.lineItems?.length) {
         this.logger.debug(`Section ${section.name} has no line items, skipping`);
         continue;
       }
 
       for (const lineItem of section.lineItems) {
-        // Extract photos from comments
-        const photos: Photo[] = [];
-        const videos: Video[] = [];
+        // Optimize media extraction with flatMap
+        const photos: Photo[] = lineItem.comments?.flatMap(c => c.photos || []) || [];
+        const videos: Video[] = lineItem.comments?.flatMap(c => c.videos || []) || [];
         
-        // Collect photos and videos from comments
-        if (lineItem.comments && lineItem.comments.length > 0) {
-          for (const comment of lineItem.comments) {
-            if (comment.photos && comment.photos.length > 0) {
-              photos.push(...comment.photos);
-            }
-            if (comment.videos && comment.videos.length > 0) {
-              videos.push(...comment.videos);
-            }
-          }
-        }
-
-        // Also check media array
-        if (lineItem.media && lineItem.media.length > 0) {
+        // Process media array if present
+        if (lineItem.media?.length) {
           for (const media of lineItem.media) {
-            if (media.images) {
-              photos.push(...media.images.map(url => ({ url })));
-            }
-            if (media.videos) {
-              videos.push(...media.videos.map(url => ({ url })));
-            }
-            if (media.photos) {
-              photos.push(...media.photos);
-            }
+            if (media.images) photos.push(...media.images.map(url => ({ url })));
+            if (media.videos) videos.push(...media.videos.map(url => ({ url })));
+            if (media.photos) photos.push(...media.photos);
           }
         }
 
-        items.push({
+        items[itemIndex++] = {
           number: lineItem.lineItemNumber,
           title: lineItem.title,
           section: section.name,
           sectionNumber: section.sectionNumber || '',
           status: lineItem.inspectionStatus || DEFAULTS.DEFAULT_STATUS,
           isDeficient: lineItem.isDeficient,
-          comments: lineItem.comments ? lineItem.comments.map(c => c.text || c.commentText || '').filter(t => t) : [],
-          photos: photos,
-          videos: videos,
-        });
+          comments: lineItem.comments?.map(c => c.text || c.commentText || '').filter(Boolean) || [],
+          photos,
+          videos,
+        };
       }
     }
     
-    // Sort by line item number
+    // Trim array to actual size
+    items.length = itemIndex;
+    
+    // Sort once at the end
     items.sort((a, b) => a.number - b.number);
     
     this.logger.info(`Mapped ${items.length} line items from ${inspection.sections.length} sections`);

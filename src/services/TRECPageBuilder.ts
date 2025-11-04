@@ -11,6 +11,7 @@ import { PDFDocument, PDFPage, PDFFont, PDFName, PDFString, rgb, StandardFonts }
 import * as QRCode from 'qrcode';
 import * as fs from 'fs/promises';
 import { Logger } from '../utils/logger';
+import { ImageCache } from '../utils/ImageCache';
 import { TRECItem } from '../types/trec';
 import { TemplateAnalyzer, TemplateFormat, TemplateSection } from './TemplateAnalyzer';
 
@@ -25,9 +26,11 @@ const CONTENT_END_Y = FOOTER_HEIGHT + 10;
 
 export class TRECPageBuilder {
   private logger = new Logger('TRECPageBuilder');
+  private imageCache = new ImageCache();
   private font: PDFFont | null = null;
   private fontBold: PDFFont | null = null;
   private templateFormat: TemplateFormat | null = null;
+  private wordWidthCache = new Map<string, Map<number, number>>();
 
   constructor(private pdfDoc: PDFDocument) {}
 
@@ -687,38 +690,74 @@ export class TRECPageBuilder {
     }
   }
 
+  /**
+   * Optimized text wrapping with word width caching
+   */
   private wrapText(text: string, maxWidth: number, fontSize: number): string[] {
-    const cleanText = text.replace(/[\r\n]+/g, ' ').replace(/[\t]/g, ' ').replace(/  +/g, ' ').trim();
+    // Optimize regex by combining operations
+    const cleanText = text.replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
     const words = cleanText.split(' ');
     const lines: string[] = [];
     let line = '';
+    let lineWidth = 0;
+    const spaceWidth = this.getWordWidth(' ', fontSize);
 
     for (const word of words) {
-      const testLine = line + word + ' ';
-      const width = this.font!.widthOfTextAtSize(testLine, fontSize);
+      const wordWidth = this.getWordWidth(word, fontSize);
+      const testWidth = lineWidth + (line ? spaceWidth : 0) + wordWidth;
 
-      if (width > maxWidth && line !== '') {
+      if (testWidth > maxWidth && line !== '') {
         lines.push(line);
-        line = word + ' ';
+        line = word;
+        lineWidth = wordWidth;
       } else {
-        line = testLine;
+        line = line ? `${line} ${word}` : word;
+        lineWidth = testWidth;
       }
     }
 
-    if (line !== '') {
+    if (line) {
       lines.push(line);
     }
 
     return lines;
   }
 
+  /**
+   * Get cached word width
+   */
+  private getWordWidth(word: string, fontSize: number): number {
+    if (!this.wordWidthCache.has(word)) {
+      this.wordWidthCache.set(word, new Map());
+    }
+
+    const sizeCache = this.wordWidthCache.get(word)!;
+    if (!sizeCache.has(fontSize)) {
+      sizeCache.set(fontSize, this.font!.widthOfTextAtSize(word, fontSize));
+    }
+
+    return sizeCache.get(fontSize)!;
+  }
+
+  /**
+   * Download image with caching (memory + disk)
+   */
   private async downloadImage(url: string): Promise<Buffer> {
+    // Check cache first
+    const cached = await this.imageCache.get(url);
+    if (cached) {
+      return cached;
+    }
+
+    // Download if not cached
+    let buffer: Buffer;
+    
     if (url.startsWith('http')) {
       const https = await import('https');
       const http = await import('http');
       const client = url.startsWith('https') ? https : http;
 
-      return new Promise((resolve, reject) => {
+      buffer = await new Promise((resolve, reject) => {
         client.get(url, (response) => {
           if (response.statusCode !== 200) {
             reject(new Error(`Failed: ${response.statusCode}`));
@@ -732,8 +771,46 @@ export class TRECPageBuilder {
         }).on('error', reject);
       });
     } else {
-      return await fs.readFile(url);
+      buffer = await fs.readFile(url);
     }
+
+    // Cache for future use
+    await this.imageCache.set(url, buffer);
+    
+    return buffer;
+  }
+
+  /**
+   * Download multiple images in parallel (batched)
+   */
+  private async downloadImagesInParallel(urls: string[]): Promise<Map<string, Buffer>> {
+    const results = new Map<string, Buffer>();
+    const batchSize = 10; // Process 10 images at a time
+
+    for (let i = 0; i < urls.length; i += batchSize) {
+      const batch = urls.slice(i, i + batchSize);
+      
+      const promises = batch.map(async (url) => {
+        try {
+          const buffer = await this.downloadImage(url);
+          return { url, buffer, success: true };
+        } catch (error) {
+          this.logger.warn(`Failed to download image: ${url}`);
+          return { url, buffer: null, success: false };
+        }
+      });
+
+      const batchResults = await Promise.all(promises);
+      batchResults.forEach(({ url, buffer, success }) => {
+        if (success && buffer) {
+          results.set(url, buffer);
+        }
+      });
+
+      this.logger.debug(`Downloaded batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(urls.length / batchSize)}`);
+    }
+
+    return results;
   }
 
   private scaleImage(width: number, height: number, maxWidth: number, maxHeight: number): { width: number; height: number } {
